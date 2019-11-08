@@ -155,6 +155,9 @@ void Lab_2(string intput, string output)
 
 	fout << countInteraction << endl;
 
+	fout.precision(4);
+	fout.setf(std::ios::fixed);
+
 	for (int i = 0; i < n; i++)
 	{
 		fout << x[i] << " ";
