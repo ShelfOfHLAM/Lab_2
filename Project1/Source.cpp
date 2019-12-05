@@ -108,24 +108,17 @@ void Lab_2(string intput, string output)
 			for (int i = 0; i < n; i++)
 			{
 				double xNext1 = 0;
-				double xNext2 = 0;
 				xNext[i] = b[i] / a[i][i];
 
 #pragma omp parallel for reduction(+:xNext1)
-				for (int j = 0; j < i - 1; j++)
+				for (int j = 0; j < n; j++)
 				{
-					xNext1 += (a[i][j] / a[i][i])*x[j];
+					if(j != i)
+						xNext1 += (a[i][j] / a[i][i])*x[j];
 
 				}
 
-#pragma omp parallel for reduction(+:xNext2)
-				for (int j = i + 1; j < n; j++)
-				{
-					xNext2 += (a[i][j] / a[i][i])*x[j];
-
-				}
-
-				xNext[i] -= xNext1 + xNext2;
+				xNext[i] -= xNext1;
 
 				if (diff < abs(xNext[i] - x[i]))
 				{
@@ -151,6 +144,21 @@ void Lab_2(string intput, string output)
 		countInteraction = countInt;
 
 	}
+
+	for (int i = 0; i < n; i++)
+	{
+		double quest = 0;
+
+		for (int j = 0; j < n; j++)
+		{
+			quest += a[i][j] * x[j];
+
+		}
+
+		cout << abs(quest - b[i]) << endl;
+
+	}
+
 	ofstream fout(output);
 
 	fout << countInteraction << endl;
@@ -184,6 +192,7 @@ string to_string(int n)
 {
 	char buf[40];
 	sprintf_s(buf, "%d", n);
+
 	return buf;
 }
 
